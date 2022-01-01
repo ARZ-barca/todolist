@@ -1,8 +1,8 @@
-import { getProjects } from './task'
+import { getProjects, getTasks } from './task'
 import { createHeader } from './headerFooter'
 import { setCurrentProject, getCurrentProject, createNavbar, createNavListItem, createProjectListItem, createAddProject } from './sidebar'
 import { createTasksDOM, createTaskItem, createTaskAdd, clearTasks } from './taskDOM'
-
+import { format, add } from 'date-fns'
 
 
 
@@ -22,9 +22,26 @@ defaultProject.addEventListener('click', function(event) {
         createTaskItem(task)
     }
 })
-createNavListItem('Today', 'fa-calendar-day');
-createNavListItem('This Week', 'fa-calendar-week');
 
+
+let todayDom = createNavListItem('Today', 'fa-calendar-day');
+todayDom.addEventListener('click', function(event) {
+    clearTasks();
+    let today = format(new Date(), 'yyyy-MM-dd');
+    //console.log(today)
+    //console.log(typeof today)
+    let tasks = getTasks();
+    for (let task of tasks) {
+        createTaskItem(task);
+    }
+})
+
+
+let thisWeekDom = createNavListItem('This Week', 'fa-calendar-week');
+thisWeekDom.addEventListener('click', function(event) {
+    let today = format(new Date(), 'yyyy-MM-dd');
+    //let endOfWeek = format(add(new Date(), {days}))
+})
 
 (() => {
     let projects = getProjects();

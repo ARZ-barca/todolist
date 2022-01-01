@@ -1,4 +1,4 @@
-export { createTask, deleteTask, createProject, getProject, getProjects, removeProject }
+export { getTasks, createTask, changeTaskDescription, changeTaskDate, deleteTask, createProject, getProject, getProjects, removeProject }
 
 
 
@@ -14,6 +14,23 @@ function createTask(description, date, project = 'default') {
     tasks.push(task);
     addToProjects(project, task);
     return task;
+}
+
+
+function getTasks() {
+    return tasks
+}
+
+
+function changeTaskDescription(task, project, newValue) {
+    tasks[tasks.indexOf(task)].description = newValue;
+    projects[project][projects[project].indexOf(task)].description = newValue;
+}
+
+
+function changeTaskDate(task, project, newValue) {
+    tasks[tasks.indexOf(task)].date = newValue;
+    projects[project][projects[project].indexOf(task)].date = newValue;
 }
 
 

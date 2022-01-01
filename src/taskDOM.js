@@ -1,6 +1,6 @@
 export {createTasksDOM, createTaskItem, createTaskAdd, clearTasks}
 
-import {createTask, getProjects, deleteTask} from './task'
+import {createTask, getProjects, deleteTaskD, changeTaskDescription, changeTaskDate} from './task'
 import { setCurrentProject, getCurrentProject} from './sidebar'
 
 //creatin the tasks section in main
@@ -19,10 +19,12 @@ function createTaskItem(task) {
     
     taskWrapper.innerHTML = `<div class="task-left-side">
                                 <i class="far fa-check-circle"></i>
-                                <p>${task.description}</p>
+                                <p class="description">${task.description}</p>
+                                <input class="description-input" type="text">
                               </div>
                               <div class="task-right-side">
-                                <p>${task.date}</p>
+                                <p class="date">${task.date}</p>
+                                <input class="date-input" type="date">
                                 <i class="fas fa-times"></i>
                               </div>`;
     
@@ -30,8 +32,75 @@ function createTaskItem(task) {
 
     let deleteIcon = taskWrapper.querySelector('.fa-times');
     deleteIcon.addEventListener('click', function(event) {
-        taskWrapper.remove()
-        deleteTask(task, getCurrentProject())
+        taskWrapper.remove();
+        deleteTask(task, getCurrentProject());
+    })
+
+    let description = taskWrapper.querySelector('.description');
+    description.style.cursor = 'pointer';
+    let date = taskWrapper.querySelector('.date');
+
+
+    //changing the description
+    let descriptionInput = taskWrapper.querySelector('.description-input') 
+    descriptionInput.style.display = 'none';
+
+    description.addEventListener('click', function(event) {
+        description.style.display = 'none';
+        descriptionInput.style.display = 'block';
+    })
+
+    descriptionInput.addEventListener('keydown', function(event) {
+        if (descriptionInput.style.display == 'none') {
+            return;
+        }
+        //console.log(event.key)
+        if (event.key === 'Enter') {
+            //console.log(descriptionInput.value)
+            if (descriptionInput.value === "") {
+                alert("project name can't be empty");
+                return;
+            } else {
+                let newValue = descriptionInput.value;
+                description.textContent = newValue;
+                changeTaskDescription(task, getCurrentProject(), newValue);
+            }
+            description.style.display = 'block';
+            descriptionInput.style.display = 'none';
+
+        } 
+        if (event.key === 'Escape') {
+            //console.log(1)
+            description.style.display = 'block';
+            descriptionInput.style.display = 'none';
+        }
+    })
+
+    let dateInput = taskWrapper.querySelector('.date-input');
+    dateInput.style.display = 'none';
+
+    date.addEventListener('click', function(event) {
+        date.style.display = 'none';
+        dateInput.style.display = 'block'
+    })
+
+    dateInput.addEventListener('keydown', function(event) {
+        if (dateInput.style.display == 'none') {
+            return;
+        }
+        if (event.key === 'Escape') {
+            date.style.display = 'block';
+            dateInput.style.display = 'none';
+        }
+    })
+
+    dateInput.addEventListener('change', function(event) {
+        let newDate = dateInput.value;
+        console.log(newDate);
+        date.textContent = newDate;
+        date.style.display = 'block';
+        dateInput.style.display = 'none';
+        changeTaskDate(task, getCurrentProject(), newDate);
     })
 }
 

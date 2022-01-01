@@ -118,7 +118,7 @@ function createAddProject(title) {
         projectDom.addEventListener('click', function(event) {
             clearTasks();
             currentProject = projectTitle;
-            console.log(getProjects())
+            //console.log(getProjects())
             for (let task of projects[projectTitle]) {
                 createTaskItem(task);
             }
