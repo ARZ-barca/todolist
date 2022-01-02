@@ -1,6 +1,6 @@
 export { setCurrentProject, getCurrentProject, createNavbar, createNavListItem, createProjectListItem, createAddProject}
 import { createProject, removeProject, getProjects } from './task'
-import { clearTasks, createTaskItem } from './taskDOM'
+import { clearTasks, createTaskItem, revealTaskAddButton } from './taskDOM'
 
 //creating the basic navbar
 function createNavbar() {
@@ -122,7 +122,7 @@ function createAddProject(title) {
             for (let task of projects[projectTitle]) {
                 createTaskItem(task);
             }
-            
+            revealTaskAddButton()
         })
         addProject.style.display = 'none';
         addButton.style.display = 'flex';

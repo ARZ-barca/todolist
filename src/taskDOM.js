@@ -1,6 +1,6 @@
-export {createTasksDOM, createTaskItem, createTaskAdd, clearTasks}
+export {createTasksDOM, createTaskItem, createTaskAdd, clearTasks, hideTaskAddButton, revealTaskAddButton}
 
-import {createTask, getProjects, deleteTaskD, changeTaskDescription, changeTaskDate} from './task'
+import { changeTaskDone, createTask, getProjects, deleteTaskD, changeTaskDescription, changeTaskDate, deleteTask} from './task'
 import { setCurrentProject, getCurrentProject} from './sidebar'
 
 //creatin the tasks section in main
@@ -18,7 +18,7 @@ function createTaskItem(task) {
     taskWrapper.classList.add('task');
     
     taskWrapper.innerHTML = `<div class="task-left-side">
-                                <i class="far fa-check-circle"></i>
+                                <i class="fas fa-check-circle"></i>
                                 <p class="description">${task.description}</p>
                                 <input class="description-input" type="text">
                               </div>
@@ -29,7 +29,15 @@ function createTaskItem(task) {
                               </div>`;
     
     document.querySelector('.tasks-wrapper').appendChild(taskWrapper);
+    
+    if (!task.done) {
+        taskWrapper.style.backgroundColor = 'transparent';
+    } else {
+        taskWrapper.style.backgroundColor = 'rgb(79, 209, 79)';
+    }
 
+
+    //deleting the task
     let deleteIcon = taskWrapper.querySelector('.fa-times');
     deleteIcon.addEventListener('click', function(event) {
         taskWrapper.remove();
@@ -76,6 +84,8 @@ function createTaskItem(task) {
         }
     })
 
+    // date input
+
     let dateInput = taskWrapper.querySelector('.date-input');
     dateInput.style.display = 'none';
 
@@ -101,6 +111,19 @@ function createTaskItem(task) {
         date.style.display = 'block';
         dateInput.style.display = 'none';
         changeTaskDate(task, getCurrentProject(), newDate);
+    })
+
+    // changing the Done status
+
+    let checkIcon = taskWrapper.querySelector('.fa-check-circle');
+    checkIcon.addEventListener('click', function(event) {
+        if (taskWrapper.style.backgroundColor === 'rgb(79, 209, 79)') {
+            taskWrapper.style.backgroundColor = 'transparent';
+            changeTaskDone(task, task.project, false);
+        } else {
+            taskWrapper.style.backgroundColor = 'rgb(79, 209, 79)';
+            changeTaskDone(task, task.project, true);
+        }
     })
 }
 
@@ -158,11 +181,15 @@ function createTaskAdd() {
 }
 
 function clearTasks() {
-    document.querySelector('.tasks-wrapper').innerHTML = ''
+    document.querySelector('.tasks-wrapper').innerHTML = '';
 }
 
+function hideTaskAddButton() {
+    document.querySelector('.task-add-button').style.display = 'none';
+}
 
-
-
+function revealTaskAddButton() {
+    document.querySelector('.task-add-button').style.display = 'flex';
+}
 
 

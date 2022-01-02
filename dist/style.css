@@ -152,9 +152,13 @@ html {
 
 /* tasks */
 
+.fa-check-circle:hover {
+    cursor: pointer;
+}
+
 .task {
     display: flex;
-    /*border: 2px solid rgb(70, 61, 61);*/
+    border: 1px solid rgb(70, 61, 61);
     font-size: larger;
     padding: 10px 20px;
 }
@@ -181,7 +185,11 @@ html {
 }
 
 
-
+/* adjusting the icons */
+ .fas {
+    position: relative;
+    top: 5px;
+}
 
 
 
