@@ -158,9 +158,11 @@ html {
 
 .task {
     display: flex;
-    border: 1px solid rgb(70, 61, 61);
+    /* border: 1px solid rgb(70, 61, 61); */
     font-size: larger;
     padding: 10px 20px;
+    border-radius: 4px;
+    margin-top: 4px;
 }
 
 .task-left-side {
@@ -191,9 +193,17 @@ html {
     top: 5px;
 }
 
+/* input boxes */
 
+.title-input {
+    font-size: 24px;
+    background-color: palegoldenrod;
+    width: 120px;
+}
 
-
+input {
+    background-color: palegoldenrod;
+}
 
 
 

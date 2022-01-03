@@ -31,11 +31,14 @@ createNavbar();
 let defaultProject = createNavListItem('Inbox', 'fa-thumbtack');
 defaultProject.addEventListener('click', function(event) {
     clearTasks()
-    let projects = getProjects()
+    let tasks = getTasks()
     setCurrentProject('default')
-    for (let task of projects['default']) {
-        createTaskItem(task)
+    for (let task of tasks) {
+        if (task.project == 'default'){
+            createTaskItem(task)
+        }
     }
+    hideTaskAddButton()
     revealTaskAddButton()
 })
 
@@ -101,23 +104,28 @@ function getStartOfWeek() {
 //creating the existing projects
 (() => {
     let projects = getProjects();
-    for (let project in projects) {
+    for (let project of projects) {
         if (project == 'default') {
             continue;
         }
         
         let p = createProjectListItem(project);
         let projectDom = p['projectDOM'];
+        //let projectTitle = projectDom.querySelector('.project-title').textContent;
+
         //let projectTitle = p['title'];
         projectDom.addEventListener('click', function(event) {
-            let projects = getProjects();
+            let tasks = getTasks();
+            let projectTitle = projectDom.querySelector('.project-title').textContent;
             clearTasks();
-            setCurrentProject(project);
-            for (let task of projects[project]) {
-                createTaskItem(task);
+            setCurrentProject(projectTitle);
+            for (let task of tasks) {
+                if (task.project == getCurrentProject()){
+                    createTaskItem(task)
+                }
             }
-            
-            revealTaskAddButton()
+            hideTaskAddButton();
+            revealTaskAddButton();
         })
     }
 })()

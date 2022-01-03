@@ -1,6 +1,6 @@
 export { setCurrentProject, getCurrentProject, createNavbar, createNavListItem, createProjectListItem, createAddProject}
-import { createProject, removeProject, getProjects } from './task'
-import { clearTasks, createTaskItem, revealTaskAddButton } from './taskDOM'
+import { createProject, deleteProject, getProjects, getTasks, changeProject } from './task'
+import { clearTasks, createTaskItem, revealTaskAddButton, hideTaskAddButton } from './taskDOM'
 
 //creating the basic navbar
 function createNavbar() {
@@ -50,7 +50,8 @@ function createProjectListItem(title) {
     item.classList.add("project-list-items", "nav-list-items")
     item.innerHTML = `  
                         <i class="fas fa-tasks"></i>
-                        <p>${title}</p>
+                        <p class="project-title">${title}</p>
+                        <input class="title-input" type="text">
                         <i class="fas fa-times"></i>
                      `;
     document.querySelector('.project-list').appendChild(item);
@@ -59,15 +60,55 @@ function createProjectListItem(title) {
 
     deleteIcon.addEventListener('click', function(event) {
         item.remove();
-        removeProject(title);
+        let projectTitle = item.querySelector('.project-title').textContent
+        deleteProject(projectTitle);
+        event.stopPropagation();
     })
+    let titleInput = item.querySelector('.title-input');
+    titleInput.style.display = 'none';
+
+    //add the ability to change name of project
+    // let projectTitle = item.querySelector('.project-title');
+
     
+    
+    // projectTitle.addEventListener('click', function(event) {
+    //     projectTitle.style.display = 'none';
+    //     titleInput.style.display = 'block';
+    //     event.stopPropagation();
+    // })
+
+    // titleInput.addEventListener('keydown', function(event){
+    //     if (event.key === 'Enter') {
+    //         if (titleInput.value === "") {
+    //             alert("project title can't be empty");
+    //             return;
+    //         } else {
+    //             setCurrentProject(titleInput.value);
+    //             let newValue = titleInput.value;
+    //             let oldValue = title;
+    //             projectTitle.textContent = newValue;
+    //             changeProject(oldValue, newValue);
+    //         }
+    //         projectTitle.style.display = 'block';
+    //         titleInput.style.display = 'none';
+    //         titleInput.value = '';
+    //     } 
+    //     if (event.key === 'Escape') {
+    //         //console.log(1)
+    //         projectTitle.style.display = 'block';
+    //         titleInput.style.display = 'none';
+    //         titleInput.value = '';
+    //     }
+    // })
+
+    // projectTitleDom.addEventListener('click', function(event) {
+    //     let oldTitle = projectTitleDom.textContent;
+    // })
+
+
     return {projectDOM : item, title};
 }
-
-
-
-
 
 
 //creating add project section
@@ -111,18 +152,23 @@ function createAddProject(title) {
             return;
         }
         createProject(value);
-        let projects = getProjects();
+        //let projects = getProjects();
         let p = createProjectListItem(value);
         let projectDom = p['projectDOM'];
-        let projectTitle = p['title'];
+        //let projectTitle = projectDom.querySelector('.project-title').textContent
         projectDom.addEventListener('click', function(event) {
+            let projectTitle = projectDom.querySelector('.project-title').textContent;
+            let tasks = getTasks();
             clearTasks();
             currentProject = projectTitle;
             //console.log(getProjects())
-            for (let task of projects[projectTitle]) {
-                createTaskItem(task);
+            for (let task of tasks) {
+                if (task.project == projectTitle){
+                    createTaskItem(task);
+                }
             }
-            revealTaskAddButton()
+            hideTaskAddButton();
+            revealTaskAddButton();
         })
         addProject.style.display = 'none';
         addButton.style.display = 'flex';
@@ -133,8 +179,6 @@ function createAddProject(title) {
         addProject.style.display = 'none';
         addButton.style.display = 'flex';
     })
-
-
 }
 
 

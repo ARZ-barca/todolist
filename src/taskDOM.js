@@ -41,7 +41,7 @@ function createTaskItem(task) {
     let deleteIcon = taskWrapper.querySelector('.fa-times');
     deleteIcon.addEventListener('click', function(event) {
         taskWrapper.remove();
-        deleteTask(task, getCurrentProject());
+        deleteTask(task);
     })
 
     let description = taskWrapper.querySelector('.description');
@@ -66,21 +66,23 @@ function createTaskItem(task) {
         if (event.key === 'Enter') {
             //console.log(descriptionInput.value)
             if (descriptionInput.value === "") {
-                alert("project name can't be empty");
+                alert("task name can't be empty");
                 return;
             } else {
                 let newValue = descriptionInput.value;
                 description.textContent = newValue;
-                changeTaskDescription(task, getCurrentProject(), newValue);
+                changeTaskDescription(task, newValue);
             }
             description.style.display = 'block';
             descriptionInput.style.display = 'none';
+            descriptionInput.value = '';
 
         } 
         if (event.key === 'Escape') {
             //console.log(1)
             description.style.display = 'block';
             descriptionInput.style.display = 'none';
+            descriptionInput.value = '';
         }
     })
 
@@ -106,11 +108,11 @@ function createTaskItem(task) {
 
     dateInput.addEventListener('change', function(event) {
         let newDate = dateInput.value;
-        console.log(newDate);
+        //console.log(newDate);
         date.textContent = newDate;
         date.style.display = 'block';
         dateInput.style.display = 'none';
-        changeTaskDate(task, getCurrentProject(), newDate);
+        changeTaskDate(task, newDate);
     })
 
     // changing the Done status
@@ -119,10 +121,10 @@ function createTaskItem(task) {
     checkIcon.addEventListener('click', function(event) {
         if (taskWrapper.style.backgroundColor === 'rgb(79, 209, 79)') {
             taskWrapper.style.backgroundColor = 'transparent';
-            changeTaskDone(task, task.project, false);
+            changeTaskDone(task, false);
         } else {
             taskWrapper.style.backgroundColor = 'rgb(79, 209, 79)';
-            changeTaskDone(task, task.project, true);
+            changeTaskDone(task, true);
         }
     })
 }
@@ -186,6 +188,7 @@ function clearTasks() {
 
 function hideTaskAddButton() {
     document.querySelector('.task-add-button').style.display = 'none';
+    document.querySelector('.add-task').style.display = 'none';
 }
 
 function revealTaskAddButton() {

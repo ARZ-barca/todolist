@@ -1,4 +1,4 @@
-export { changeTaskDone, getLocalStorage, getTasks, createTask, changeTaskDescription, changeTaskDate, deleteTask, createProject, getProject, getProjects, removeProject }
+export { changeTaskDone, getLocalStorage, getTasks, createTask, changeTaskDescription, changeTaskDate, deleteTask, createProject, getProjects, deleteProject,  changeProject }
 
 /*
 function storageAvailable(type) {
@@ -30,7 +30,7 @@ function storageAvailable(type) {
 
 let tasks = []
 
-let projects = {'default': []}
+let projects = ['default']
 
 
 function getLocalStorage() {
@@ -52,79 +52,83 @@ function createTask(description, date, project = 'default') {
     //let date;
     let task = {description, date, project, done : false};
     tasks.push(task);
-    addToProjects(project, task);
+    //addToProjects(project);
     updateLocalStorage();
     return task;
 }
 
 
 function getTasks() {
-    return tasks
-}
-
-
-function changeTaskDescription(task, project, newValue) {
-    tasks[tasks.indexOf(task)].description = newValue;
-    projects[project][projects[project].indexOf(task)].description = newValue;
-    updateLocalStorage();
-}
-
-
-function changeTaskDate(task, project, newValue) {
-    tasks[tasks.indexOf(task)].date = newValue;
-    projects[project][projects[project].indexOf(task)].date = newValue;
-    updateLocalStorage();
-}
-
-
-function changeTaskDone(task, project, newValue) {
-    // console.log(task)
-    // console.log(project)
-    // console.log(tasks, '--', projects)
-    // problem here
-    tasks[tasks.indexOf(task)].done = newValue;
-    projects[project][projects[project].indexOf(task)].done = newValue;
-    updateLocalStorage();
-}
-
-
-function deleteTask(task, project) {
-    tasks.splice(tasks.indexOf(task), 1);
-    projects[project].splice(projects[project].indexOf(task), 1)
-    updateLocalStorage();
-}
-
-
-function createProject(title) {
-    projects[title] = [];
-    updateLocalStorage();
-}
-
-
-function addToProjects(project, task) {
-    if (projects[project] == undefined) {
-        projects[project] = [];
-    }
-
-    projects[project].push(task);
-    updateLocalStorage();
+    return tasks;
 }
 
 
 function getProjects() {
-    return Object.assign({}, projects);
+    return projects;
 }
 
 
-function removeProject(title) {
-    delete projects[title]
+function changeTaskDescription(task, newValue) {
+    tasks[tasks.indexOf(task)].description = newValue;
     updateLocalStorage();
 }
 
 
-function getProject(title){
-    return projects[title]
+function changeTaskDate(task, newValue) {
+    tasks[tasks.indexOf(task)].date = newValue;
+    updateLocalStorage();
 }
+
+
+function changeTaskDone(task, newValue) {
+    tasks[tasks.indexOf(task)].done = newValue;
+    updateLocalStorage();
+}
+
+
+function deleteTask(task) {
+    tasks.splice(tasks.indexOf(task), 1);
+    updateLocalStorage();
+}
+
+
+function changeTaskProject(task, newProject) {
+    tasks[tasks.indexOf(task)].project = newProject;
+    updateLocalStorage();
+}
+
+
+function createProject(project) {
+    projects.push(project);
+    updateLocalStorage();
+}
+
+
+function changeProject(project,  newProject) {
+    projects.splice(projects.indexOf(project), 1, newProject);
+    for (let task of tasks) {
+        if (task.project == project) {
+            changeTaskProject(task, newProject);
+        }
+    }
+    updateLocalStorage();
+}
+
+
+function deleteProject(title) {
+    projects.splice(projects.indexOf(title), 1);
+    for (let task of tasks) {
+        // console.log(tasks)
+        // console.log(task)
+        // console.log(task.project, '-', title)
+        if (task.project == title) {
+            deleteTask(task);
+        }
+    }
+    updateLocalStorage();
+}
+
+
 
 
 /*
