@@ -109,7 +109,6 @@ function getStartOfWeek() {
 //creating the existing projects
 (() => {
   let projects = getProjects();
-  console.log(projects);
   for (let project of projects) {
     if (project == "default") {
       continue;
