@@ -1,4 +1,16 @@
-export { changeTaskDone, getLocalStorage, getTasks, createTask, changeTaskDescription, changeTaskDate, deleteTask, createProject, getProjects, deleteProject,  changeProject }
+export {
+  changeTaskDone,
+  getLocalStorage,
+  getTasks,
+  createTask,
+  changeTaskDescription,
+  changeTaskDate,
+  deleteTask,
+  createProject,
+  getProjects,
+  deleteProject,
+  changeProject,
+};
 
 /*
 function storageAvailable(type) {
@@ -27,109 +39,96 @@ function storageAvailable(type) {
 }
 */
 
+let tasks = [];
 
-let tasks = []
-
-let projects = ['default']
-
+let projects = ["default"];
 
 function getLocalStorage() {
-    if (localStorage.length == 0) {
-        return;
-    }
-    tasks = JSON.parse(localStorage.getItem('tasks'));
-    projects = JSON.parse(localStorage.getItem('projects'));
+  if (localStorage.length == 0) {
+    return;
+  }
+  if (!localStorage.getItem("tasks") === null) {
+    tasks = JSON.parse(localStorage.getItem("tasks"));
+  }
+  if (!localStorage.getItem("projects") === null) {
+    projects = JSON.parse(localStorage.getItem("projects"));
+  }
 }
-
 
 function updateLocalStorage() {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    localStorage.setItem('projects', JSON.stringify(projects));
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  localStorage.setItem("projects", JSON.stringify(projects));
 }
 
-
-function createTask(description, date, project = 'default') {
-    //let date;
-    let task = {description, date, project, done : false};
-    tasks.push(task);
-    //addToProjects(project);
-    updateLocalStorage();
-    return task;
+function createTask(description, date, project = "default") {
+  //let date;
+  let task = { description, date, project, done: false };
+  tasks.push(task);
+  //addToProjects(project);
+  updateLocalStorage();
+  return task;
 }
-
 
 function getTasks() {
-    return tasks;
+  return tasks;
 }
-
 
 function getProjects() {
-    return projects;
+  return projects;
 }
-
 
 function changeTaskDescription(task, newValue) {
-    tasks[tasks.indexOf(task)].description = newValue;
-    updateLocalStorage();
+  tasks[tasks.indexOf(task)].description = newValue;
+  updateLocalStorage();
 }
-
 
 function changeTaskDate(task, newValue) {
-    tasks[tasks.indexOf(task)].date = newValue;
-    updateLocalStorage();
+  tasks[tasks.indexOf(task)].date = newValue;
+  updateLocalStorage();
 }
-
 
 function changeTaskDone(task, newValue) {
-    tasks[tasks.indexOf(task)].done = newValue;
-    updateLocalStorage();
+  tasks[tasks.indexOf(task)].done = newValue;
+  updateLocalStorage();
 }
-
 
 function deleteTask(task) {
-    tasks.splice(tasks.indexOf(task), 1);
-    updateLocalStorage();
+  tasks.splice(tasks.indexOf(task), 1);
+  updateLocalStorage();
 }
-
 
 function changeTaskProject(task, newProject) {
-    tasks[tasks.indexOf(task)].project = newProject;
-    updateLocalStorage();
+  tasks[tasks.indexOf(task)].project = newProject;
+  updateLocalStorage();
 }
-
 
 function createProject(project) {
-    projects.push(project);
-    updateLocalStorage();
+  projects.push(project);
+  updateLocalStorage();
 }
 
-
-function changeProject(project,  newProject) {
-    projects.splice(projects.indexOf(project), 1, newProject);
-    for (let task of tasks) {
-        if (task.project == project) {
-            changeTaskProject(task, newProject);
-        }
+function changeProject(project, newProject) {
+  projects.splice(projects.indexOf(project), 1, newProject);
+  for (let task of tasks) {
+    if (task.project == project) {
+      changeTaskProject(task, newProject);
     }
-    updateLocalStorage();
+  }
+  updateLocalStorage();
 }
-
 
 function deleteProject(title) {
-    projects.splice(projects.indexOf(title), 1);
-    for (let task of tasks) {
-        // console.log(tasks)
-        // console.log(task)
-        // console.log(task.project, '-', title)
-        if (task.project == title) {
-            deleteTask(task);
-        }
+  projects.splice(projects.indexOf(title), 1);
+  for (let task of tasks) {
+    // console.log(tasks)
+    // console.log(task)
+    // console.log(task.project, '-', title)
+    if (task.project == title) {
+      deleteTask(task);
     }
-    updateLocalStorage();
+  }
+  updateLocalStorage();
 }
-
-
-
 
 /*
 function sortTasks(tasks) {
@@ -139,22 +138,3 @@ function sortTasks(tasks) {
     })
 }
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
